@@ -1,3 +1,3 @@
 @echo off
-redis-server D:\redis-64.2.8.2101\redis.windows.conf
+redis-server D:\redis_bag\redis.windows.conf
 pause
