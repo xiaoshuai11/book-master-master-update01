@@ -3,12 +3,35 @@ from django.db.models import Avg
 
 
 class User(models.Model):
+    sex_choices = (
+        (1, '男'),
+        (0, '女'),
+    )
+    work_choices = (
+        (1,"IT类"),
+        (2,"设计类"),
+        (3,"销售类"),
+        (4,"文秘"),
+        (5,"学生"),
+    )
+    country_choices = (
+        (1, "中国"),
+        (2, "美国"),
+        (3, "英国"),
+        (4, "法国"),
+        (5, "德国"),
+        (6,"日本"),
+        (7,"意大利")
+    )
     username = models.CharField(max_length=32, unique=True, verbose_name="账号")
     password = models.CharField(max_length=32, verbose_name="密码")
     phone = models.CharField(max_length=32, verbose_name="手机号码")
     name = models.CharField(max_length=32, verbose_name="名字", unique=True)
-    address = models.CharField(max_length=32, verbose_name="地址")
+    address = models.IntegerField(verbose_name="国家",default=1,choices=country_choices)
     email = models.EmailField(verbose_name="邮箱")
+    sex = models.IntegerField(verbose_name="性别",default=1,choices=sex_choices)
+    age = models.IntegerField(verbose_name="年龄")
+    work = models.IntegerField(verbose_name="工作类别",default=5,choices=work_choices)
 
     class Meta:
         verbose_name_plural = "用户"
@@ -66,6 +89,10 @@ class Rate(models.Model):
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, blank=True, null=True, verbose_name="用户id",
     )
+    sex = models.IntegerField(verbose_name="性别", default=1)
+    age = models.IntegerField(verbose_name="年龄")
+    work = models.IntegerField(verbose_name="工作类别", default=5)
+    address = models.IntegerField(verbose_name="国家", default=1)
     mark = models.FloatField(verbose_name="评分")
     create_time = models.DateTimeField(verbose_name="发布时间", auto_now_add=True)
 

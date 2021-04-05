@@ -70,6 +70,7 @@ for userid,items in data_dic.items():  #遍历所有用户
         else:
             distance = temp / (temp2 + temp3 - temp)
             #distance = temp / (sqrt(temp2) * sqrt(temp3))
+            #distance = temp / sqrt(temp2 * temp3)
         similarity_dic[userid] = distance     #保存与每个其他用户相似度
         print("userid:" + str(userid) + " : ")
         print(similarity_dic[userid])

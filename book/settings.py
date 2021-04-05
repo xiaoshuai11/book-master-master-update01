@@ -95,7 +95,7 @@ WSGI_APPLICATION = "book.wsgi.application"
 """
 把账号密码修改为你的
 """
-DATABASES_NAME = 'book_master'  # 数据库名称
+DATABASES_NAME = 'book_master_update01'  # 数据库名称
 DATABASES_USER = 'root'  # 数据库用户名，按实际情况填写你的
 DATABASES_PASSWORD = '331155'  # 数据库密码，按实际情况填写你的
 REDIS_PASSWORD = '331155'  # redis密码，按实际情况填写你的
