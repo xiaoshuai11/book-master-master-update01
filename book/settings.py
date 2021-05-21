@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     'django_celery_beat',
     # celery应用
     'djcelery',
-
     # 注册富文本应用
     'tinymce',
     "user",
@@ -93,19 +92,19 @@ WSGI_APPLICATION = "book.wsgi.application"
 #     }
 # }
 """
-把账号密码修改为你的
+数据库配置
 """
 DATABASES_NAME = 'book_master_update01'  # 数据库名称
-DATABASES_USER = 'root'  # 数据库用户名，按实际情况填写你的
-DATABASES_PASSWORD = '331155'  # 数据库密码，按实际情况填写你的
-REDIS_PASSWORD = '331155'  # redis密码，按实际情况填写你的
+DATABASES_USER = 'root'  # 数据库用户名
+DATABASES_PASSWORD = '331155'  # 数据库密码
+REDIS_PASSWORD = '331155'  # redis密码
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',  # 修改数据库为MySQL，并进行配置
         'NAME': DATABASES_NAME,  # 数据库名称
-        'USER': DATABASES_USER,  # 你的用户名，
-        'PASSWORD': DATABASES_PASSWORD,  # 你的密码
+        'USER': DATABASES_USER,  # 用户名
+        'PASSWORD': DATABASES_PASSWORD,  # 密码
         'HOST': 'localhost',
         'PORT': 3306,
         'OPTIONS': {'charset': 'utf8mb4', }

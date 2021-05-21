@@ -23,7 +23,6 @@ def login_in(func):  # 验证用户是否登录
             return func(*args, **kwargs)
         else:
             return redirect(reverse("login"))
-
     return wrapper
 
 
@@ -92,7 +91,7 @@ def register(request):
                 address=address,
                 age=age,
                 sex=sex,
-                work=work
+                work=work,
             )
             # 根据表单数据创建一个新的用户
             return redirect(reverse("login"))  # 跳转到登录界面
@@ -104,14 +103,14 @@ def register(request):
     form = RegisterForm()
     return render(request, "user/register.html", {"form": form})
 
-
+#登录页面
 def logout(request):
     if not request.session.get("login_in", None):  # 不在登录状态跳转回首页
         return redirect(reverse("index"))
     request.session.flush()  # 清除session信息
     return redirect(reverse("index"))
 
-
+#所有书籍
 def all_book(request):
     books = Book.objects.annotate(user_collector=Count('collect')).order_by('-user_collector')
     paginator = Paginator(books, 9)
@@ -119,8 +118,8 @@ def all_book(request):
     books = paginator.page(current_page)
     return render(request, "user/item.html", {"books": books, "title": "所有书籍"})
 
-
-def search(request):  # 搜索
+# 搜索
+def search(request):
     if request.method == "POST":  # 如果搜索界面
         key = request.POST["search"]
         request.session["search"] = key  # 记录搜索关键词解决跳页问题
@@ -134,11 +133,12 @@ def search(request):  # 搜索
     return render(request, "user/item.html", {"books": books})
 
 
+# 获取具体的书籍
 def book(request, book_id):
-    # 获取具体的书籍
     book = Book.objects.get(pk=book_id)
     book.num += 1
     book.save()
+    #取出图书评论先关信息
     comments = book.comment_set.order_by("-create_time")
     user_id = request.session.get("user_id")
     rate = Rate.objects.filter(book=book).aggregate(Avg("mark")).get("mark__avg", 0)
@@ -155,8 +155,8 @@ def book(request, book_id):
 
 
 @login_in
+# 图书评分
 def score(request, book_id):
-    # 打分
     user = User.objects.get(id=request.session.get("user_id"))
     book = Book.objects.get(id=book_id)
     score = float(request.POST.get("score", 0))
@@ -168,6 +168,7 @@ def score(request, book_id):
         is_rate = {'mark': score}
     comments = book.comment_set.order_by("-create_time")
     user_id = request.session.get("user_id")
+    #计算书籍总平均得分
     rate = Rate.objects.filter(book=book).aggregate(Avg("mark")).get("mark__avg", 0)
     rate = rate if rate else 0
     book_rate = round(rate, 2)
@@ -179,8 +180,8 @@ def score(request, book_id):
 
 
 @login_in
+# 评论
 def commen(request, book_id):
-    # 评论
     user = User.objects.get(id=request.session.get("user_id"))
     book = Book.objects.get(id=book_id)
     comment = request.POST.get("comment", "")
@@ -199,6 +200,7 @@ def commen(request, book_id):
 
 
 @login_in
+#点赞
 def good(request, commen_id, book_id):
     # 点赞
     commen = Comment.objects.get(id=commen_id)
@@ -220,6 +222,7 @@ def good(request, commen_id, book_id):
 
 
 @login_in
+#点击收藏
 def collect(request, book_id):
     user = User.objects.get(id=request.session.get("user_id"))
     book = Book.objects.get(id=book_id)
@@ -242,6 +245,7 @@ def collect(request, book_id):
 
 
 @login_in
+#取消收藏
 def decollect(request, book_id):
     user = User.objects.get(id=request.session.get("user_id"))
     book = Book.objects.get(id=book_id)
@@ -406,6 +410,7 @@ def new_board_comment(request, message_board_id, fap_id=1, currentpage=1):
 
 
 # @login_in
+# 点赞或收藏
 def like_collect(request):
     # 点赞或收藏
 
@@ -478,6 +483,7 @@ def personal(request):
 
 
 @login_in
+# 我的收藏
 def mycollect(request):
     user = User.objects.get(id=request.session.get("user_id"))
     book = user.book_set.all()
@@ -485,6 +491,7 @@ def mycollect(request):
 
 
 @login_in
+#我的活动
 def myjoin(request):
     user_id = request.session.get("user_id")
     user = User.objects.get(id=user_id)
@@ -493,6 +500,7 @@ def myjoin(request):
 
 
 @login_in
+#我的评论
 def my_comments(request):
     user = User.objects.get(id=request.session.get("user_id"))
     comments = user.comment_set.all()
@@ -518,7 +526,9 @@ def my_rate(request):
 
 
 @login_in
+#删除评分
 def delete_rate(request, rate_id):
+    #pk为primary key（主键）
     rate = Rate.objects.filter(pk=rate_id)
     if not rate:
         return render(request, "user/my_rate.html", {"rate": rate})
@@ -534,6 +544,7 @@ def delete_rate(request, rate_id):
 #最热书籍
 def hot_book(request):
     page_number = request.GET.get("page", 1)
+    #根据收藏量排序
     books = Book.objects.annotate(user_collector=Count('collect')).order_by('-user_collector')[:10]
     books = books_paginator(books[:10], page_number)
     return render(request, "user/item.html", {"books": books, "title": "最热书籍"})
@@ -585,7 +596,8 @@ def kind(request, kind_id):
     books = tags.tags.all()
     return render(request, "user/kind.html", {"books": books})
 
-#周推荐图书
+
+#周推荐图书（初始版，未使用）
 @login_in
 def reco_by_week(request):
     page = request.GET.get("page", 1)

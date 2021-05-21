@@ -1,6 +1,6 @@
 from django import forms
 from .models import *
-
+from django.core.validators import RegexValidator
 
 class Login(forms.Form):
     username = forms.CharField(
@@ -75,6 +75,10 @@ class RegisterForm(forms.ModelForm):
         widget=forms.TextInput(attrs={"class": "form-control"}),
     )
     """
+    phone = forms.CharField(label="手机",
+                                   validators=[RegexValidator(r'^(1[0|1|2|3|4|5|6|7|8|9])\d{9}$', '手机格式错误'), ],
+                                   error_messages={'required': '手机号不能为空'})
+
     password1 = forms.CharField(label='密码', widget=forms.PasswordInput(),
                                 error_messages={'required': '密码不能为空'})
 

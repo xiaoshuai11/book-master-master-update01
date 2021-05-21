@@ -23,10 +23,10 @@ class User(models.Model):
         (6,"日本"),
         (7,"意大利")
     )
-    username = models.CharField(max_length=32, unique=True, verbose_name="账号")
+    username = models.CharField(max_length=32, unique=True, verbose_name="账号名")
     password = models.CharField(max_length=32, verbose_name="密码")
     phone = models.CharField(max_length=32, verbose_name="手机号码")
-    name = models.CharField(max_length=32, verbose_name="名字", unique=True)
+    name = models.CharField(max_length=32, verbose_name="姓名", unique=True)
     address = models.IntegerField(verbose_name="国家",default=1,choices=country_choices)
     email = models.EmailField(verbose_name="邮箱")
     sex = models.IntegerField(verbose_name="性别",default=1,choices=sex_choices)
